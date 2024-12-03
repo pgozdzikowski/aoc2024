@@ -17,8 +17,6 @@ public class RedNosedReports {
                 .sum();
     }
 
-
-
     public int countNumOfSafeReportsWithPossibleOneInvalid(Input input) {
         List<List<Integer>> reports = convertToReportsList(input);
 
