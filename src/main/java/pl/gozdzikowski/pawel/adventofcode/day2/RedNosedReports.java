@@ -25,7 +25,7 @@ public class RedNosedReports {
                 .sum();
     }
 
-    private static List<List<Integer>> convertToReportsList(Input input) {
+    private List<List<Integer>> convertToReportsList(Input input) {
         return input.get().stream()
                 .map((el) -> Arrays.stream(el.split("\\s+"))
                 .map(Integer::parseInt).toList()).toList();
@@ -37,7 +37,7 @@ public class RedNosedReports {
                 .toList());
     }
 
-    private static boolean checkRulesOnDiff(List<Integer> diffs) {
+    private boolean checkRulesOnDiff(List<Integer> diffs) {
         return (diffs.stream().allMatch((el) -> el > 0) || diffs.stream().allMatch((el) -> el < 0)) &&
                 diffs.stream().allMatch((el) -> Math.abs(el) >= 1 && Math.abs(el) <= 3);
     }

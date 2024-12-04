@@ -5,10 +5,10 @@ import java.util.regex.Pattern;
 import pl.gozdzikowski.pawel.adventofcode.shared.input.Input;
 
 public class MullItOver {
-    private final Pattern pattern = Pattern.compile("mul\\((\\d{1,3}),(\\d{1,3})\\)");
-    private final Pattern patternWithExcluding = Pattern.compile("mul\\((\\d{1,3}),(\\d{1,3})\\)|don't\\(\\)|do\\(\\)");
-    private final String DO_STATEMENT = "do()";
-    private final String DONT_STATEMENT = "don't()";
+    private static final Pattern pattern = Pattern.compile("mul\\((\\d{1,3}),(\\d{1,3})\\)");
+    private static final Pattern patternWithExcluding = Pattern.compile("mul\\((\\d{1,3}),(\\d{1,3})\\)|don't\\(\\)|do\\(\\)");
+    private static final String DO_STATEMENT = "do()";
+    private static final String DONT_STATEMENT = "don't()";
 
 
     public long sumInstructionMultiplication(Input input) {
