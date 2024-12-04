@@ -13,13 +13,13 @@ public class CeresSearch {
     private static final String SEARCHED_WORD_MAS = "MAS";
 
     public int countOccurrencesOfXmas(Input input) {
-        String[][] crossword = paseCrossword(input);
+        String[][] crossword = parseCrossword(input);
 
         return searchForWord(crossword, allDirections(), SEARCHED_WORD_XMAS).size();
     }
 
     public int countOccurrencesOfCrossingDiagonalXmas(Input input) {
-        String[][] crossword = paseCrossword(input);
+        String[][] crossword = parseCrossword(input);
 
         var words = searchForWord(crossword, diagonalDirections(), SEARCHED_WORD_MAS);
 
@@ -81,7 +81,7 @@ public class CeresSearch {
         return currentX >= 0 && currentY >= 0 && currentX < crossword[0].length && currentY < crossword.length;
     }
 
-    private static String[][] paseCrossword(Input input) {
+    private static String[][] parseCrossword(Input input) {
         return input.get().stream().map((el) -> Arrays.stream(el.split("")).toArray(String[]::new))
                 .toArray(String[][]::new);
     }
