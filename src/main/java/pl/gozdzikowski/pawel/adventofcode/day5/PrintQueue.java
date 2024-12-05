@@ -1,5 +1,6 @@
 package pl.gozdzikowski.pawel.adventofcode.day5;
 
+import pl.gozdzikowski.pawel.adventofcode.shared.collections.Pair;
 import pl.gozdzikowski.pawel.adventofcode.shared.input.Input;
 
 import java.util.Arrays;
@@ -7,40 +8,45 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class PrintQueue {
 
     public long findSumOfPrintedPages(Input input) {
-        String[] splittedContent = input.getContent().split("\\n\\n");
-        String orderingRules = splittedContent[0];
-        String updateSet = splittedContent[1];
+        Pair<String, String> inputSplitted = splitOnTwoParts(input);
 
-        Map<Long, List<Long>> rules = parseOrderingRules(orderingRules);
-
-        return parseUpdateList(updateSet)
-                .filter((el) -> checkIfCorrect(el, rules))
+        Map<Long, List<Long>> rules = parseOrderingRules(inputSplitted.left());
+        List<List<Long>> originalList = parseUpdateList(inputSplitted.right());
+        return originalList.stream()
+                .map((el) -> el.stream().sorted(new RulesComparator(rules)).toList())
+                .filter(originalList::contains)
                 .mapToLong(this::getElementAtMiddle)
                 .sum();
     }
 
     public long findSumOfSortedIncorrectly(Input input) {
-        String[] splittedContent = input.getContent().split("\\n\\n");
-        String orderingRules = splittedContent[0];
-        String updateSet = splittedContent[1];
+        Pair<String, String> inputSplitted = splitOnTwoParts(input);
 
-        Map<Long, List<Long>> rules = parseOrderingRules(orderingRules);
+        Map<Long, List<Long>> rules = parseOrderingRules(inputSplitted.left());
 
-        return parseUpdateList(updateSet)
-                .filter((el) -> !checkIfCorrect(el, rules))
+        List<List<Long>> originalList = parseUpdateList(inputSplitted.right());
+
+        return originalList
+                .stream()
                 .map((el) -> el.stream().sorted(new RulesComparator(rules)).toList())
+                .filter((el) -> !originalList.contains(el))
                 .mapToLong(this::getElementAtMiddle)
                 .sum();
     }
 
-    private Stream<List<Long>> parseUpdateList(String updateSet) {
+    private static Pair<String, String> splitOnTwoParts(Input input) {
+        String[] splittedContent = input.getContent().split("\\n\\n");
+        return Pair.of(splittedContent[0], splittedContent[1]);
+    }
+
+    private List<List<Long>> parseUpdateList(String updateSet) {
         return Arrays.stream(updateSet.split("\\n"))
-                .map((el) -> Arrays.stream(el.split(",")).map(Long::parseLong).toList());
+                .map((el) -> Arrays.stream(el.split(",")).map(Long::parseLong).toList())
+                .toList();
     }
 
     private  Map<Long, List<Long>> parseOrderingRules(String orderingRules) {
@@ -51,19 +57,6 @@ public class PrintQueue {
 
     private Long getElementAtMiddle(List<Long> el) {
         return el.get(el.size() / 2);
-    }
-
-    private boolean checkIfCorrect(List<Long> updateRules, Map<Long, List<Long>> rules) {
-        for(int i =1; i < updateRules.size(); i++) {
-            Long currentElement = updateRules.get(i);
-            for(int j = 0; j < i; j++) {
-                if(rules.get(currentElement)!= null && rules.get(currentElement).contains(updateRules.get(j))) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
     }
 
     static class RulesComparator implements Comparator<Long> {
@@ -83,7 +76,7 @@ public class PrintQueue {
                 return -1;
             }
 
-            return 0;
+            return 1;
         }
     }
 }
