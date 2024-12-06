@@ -22,7 +22,6 @@ public class GuardGallivant {
     public int countGuardDistinctPositions(Input input) {
         String[][] world = input.get().stream().map((el) -> el.split("")).toArray(String[][]::new);
 
-
         GuardState currentGuardState = findInitialGuardState(world);
 
         var pathResult = (PathResult)findStatesInWhichGuardWas(currentGuardState, world);
@@ -93,7 +92,6 @@ public class GuardGallivant {
     }
 
     GuardState findInitialGuardState(String[][] world) {
-
         for (int y = 0; y < world.length; y++) {
             for (int x = 0; x < world[0].length; x++) {
                 if (Direction.symbols().contains(world[y][x])) {
@@ -153,7 +151,7 @@ public class GuardGallivant {
     }
 
     final static class PathResult extends GuardPathResult {
-        private List<GuardState> guardStates;
+        private final List<GuardState> guardStates;
 
         public PathResult(List<GuardState> guardStates) {
             this.guardStates = guardStates;
@@ -165,7 +163,6 @@ public class GuardGallivant {
     }
 
     final static class InfiniteLoopPath extends GuardPathResult {
-
     }
 
 
