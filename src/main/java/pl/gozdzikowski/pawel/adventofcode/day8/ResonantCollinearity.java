@@ -16,7 +16,7 @@ public class ResonantCollinearity {
         String[][] world = input.get().stream().map((el) -> el.split("")).toArray(String[][]::new);
         Map<String, List<Pair<Integer, Integer>>> locationsOfSameTypeAntennas = locationOfSameTypeAntennas(world);
 
-        return findAntinodes(world, locationsOfSameTypeAntennas, 1, 1)
+        return findAntinodes(world, locationsOfSameTypeAntennas, 2, 2)
                 .size();
     }
 
@@ -67,11 +67,11 @@ public class ResonantCollinearity {
         Pair<Integer, Integer> distance = distanceBetweenAntennas(firstAntena, secondAntena);
         Set<Pair<Integer, Integer>> antinodes = new HashSet<>();
 
-        int direction = secondAntena.left() >= firstAntena.left() ? -1 : 1;
+        int direction = secondAntena.left() >= firstAntena.left() ? 1 : -1;
         int currentNumOfDistance = from;
 
         do {
-            Pair<Integer, Integer> currentPoint = Pair.of(firstAntena.left() + direction * currentNumOfDistance * distance.left(), firstAntena.right() - currentNumOfDistance * distance.right());
+            Pair<Integer, Integer> currentPoint = Pair.of(firstAntena.left() + direction * currentNumOfDistance * distance.left(), firstAntena.right() + currentNumOfDistance * distance.right());
             if (outOfBound(currentPoint, world)) break;
             antinodes.add(currentPoint);
             currentNumOfDistance++;
@@ -79,7 +79,7 @@ public class ResonantCollinearity {
 
         currentNumOfDistance = from;
         do {
-            Pair<Integer, Integer> currentPoint = Pair.of(secondAntena.left() - direction * currentNumOfDistance * distance.left(), secondAntena.right() + currentNumOfDistance * distance.right());
+            Pair<Integer, Integer> currentPoint = Pair.of(secondAntena.left() - direction * currentNumOfDistance * distance.left(), secondAntena.right() - currentNumOfDistance * distance.right());
             if (outOfBound(currentPoint, world)) break;
             antinodes.add(currentPoint);
             currentNumOfDistance++;
