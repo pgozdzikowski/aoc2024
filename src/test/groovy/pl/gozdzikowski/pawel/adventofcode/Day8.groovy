@@ -26,7 +26,7 @@ class Day8 extends Specification {
 ............
 """
         when:
-            def antinodes = resonantCollinearity.countDistinctAntinodes(new StringInput(input))
+            def antinodes = resonantCollinearity.countDistinctAntinodesAtDistanceTwo(new StringInput(input))
         then:
             antinodes == 14
     }
@@ -35,7 +35,7 @@ class Day8 extends Specification {
         given:
             Input input = new FileInput('day8.txt')
         when:
-            def result = resonantCollinearity.countDistinctAntinodes(input)
+            def result = resonantCollinearity.countDistinctAntinodesAtDistanceTwo(input)
         then:
             result == 348
     }

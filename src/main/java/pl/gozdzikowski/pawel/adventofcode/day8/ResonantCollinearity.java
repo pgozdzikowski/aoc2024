@@ -12,7 +12,7 @@ import java.util.Set;
 
 public class ResonantCollinearity {
 
-    public int countDistinctAntinodes(Input input) {
+    public int countDistinctAntinodesAtDistanceTwo(Input input) {
         String[][] world = input.get().stream().map((el) -> el.split("")).toArray(String[][]::new);
         Map<String, List<Pair<Integer, Integer>>> locationsOfSameTypeAntennas = locationOfSameTypeAntennas(world);
 
@@ -68,22 +68,22 @@ public class ResonantCollinearity {
         Set<Pair<Integer, Integer>> antinodes = new HashSet<>();
 
         int direction = secondAntena.left() >= firstAntena.left() ? 1 : -1;
-        int currentNumOfDistance = from;
+        int multiplier = from;
 
         do {
-            Pair<Integer, Integer> currentPoint = Pair.of(firstAntena.left() + direction * currentNumOfDistance * distance.left(), firstAntena.right() + currentNumOfDistance * distance.right());
+            Pair<Integer, Integer> currentPoint = Pair.of(firstAntena.left() + direction * multiplier * distance.left(), firstAntena.right() + multiplier * distance.right());
             if (outOfBound(currentPoint, world)) break;
             antinodes.add(currentPoint);
-            currentNumOfDistance++;
-        } while (currentNumOfDistance < to);
+            multiplier++;
+        } while (multiplier < to);
 
-        currentNumOfDistance = from;
+        multiplier = from;
         do {
-            Pair<Integer, Integer> currentPoint = Pair.of(secondAntena.left() - direction * currentNumOfDistance * distance.left(), secondAntena.right() - currentNumOfDistance * distance.right());
+            Pair<Integer, Integer> currentPoint = Pair.of(secondAntena.left() - direction * multiplier * distance.left(), secondAntena.right() - multiplier * distance.right());
             if (outOfBound(currentPoint, world)) break;
             antinodes.add(currentPoint);
-            currentNumOfDistance++;
-        } while (currentNumOfDistance < to);
+            multiplier++;
+        } while (multiplier < to);
 
         return antinodes;
     }
