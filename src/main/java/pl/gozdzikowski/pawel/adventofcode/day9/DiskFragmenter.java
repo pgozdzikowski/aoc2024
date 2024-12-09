@@ -39,30 +39,30 @@ public class DiskFragmenter {
         }
 
         public Disk compressMovingWholeFile() {
-            int indexOfLastFile = findLastFile(disk, disk.length - 1);
+            int indexOfLastFile = findLastFileEndIndexBeforePosition(disk.length - 1);
             while (indexOfLastFile >= 0) {
-                int currentFileSize = calculateLengthOfFile(disk, indexOfLastFile);
+                int currentFileSize = calculateLengthOfFile(indexOfLastFile);
                 indexOfLastFile -= (currentFileSize - 1);
-                int indexOfGap = findGapOfLength(indexOfLastFile, currentFileSize, disk);
+                int indexOfGap = findGapOfLength(indexOfLastFile, currentFileSize);
                 if (indexOfGap != -1) {
                     for (int i = 0; i < currentFileSize; i++) {
                         disk[indexOfGap + i] = disk[indexOfLastFile + i];
                         disk[indexOfLastFile + i] = -1;
                     }
                 }
-                indexOfLastFile = findLastFile(disk, indexOfLastFile - 1);
+                indexOfLastFile = findLastFileEndIndexBeforePosition(indexOfLastFile - 1);
             }
             return this;
         }
 
 
         public Disk compressMovingPartOfFile() {
-            int indexOfLastFile = findLastFile(disk, disk.length - 1);
+            int indexOfLastFile = findLastFileEndIndexBeforePosition(disk.length - 1);
             for (int i = 0; i < indexOfLastFile; i++) {
                 if (disk[i] == -1) {
                     disk[i] = disk[indexOfLastFile];
                     disk[indexOfLastFile] = -1;
-                    indexOfLastFile = findLastFile(disk, indexOfLastFile - 1);
+                    indexOfLastFile = findLastFileEndIndexBeforePosition(indexOfLastFile - 1);
                 }
             }
 
@@ -102,10 +102,10 @@ public class DiskFragmenter {
             return result;
         }
 
-        private int calculateLengthOfFile(int[] disk, int startingIndex) {
-            int currentPosition = startingIndex;
+        private int calculateLengthOfFile(int endingIndex) {
+            int currentPosition = endingIndex;
             int length = 0;
-            int fileIndex = disk[startingIndex];
+            int fileIndex = disk[endingIndex];
             while (currentPosition >= 0 && disk[currentPosition] == fileIndex && (disk[currentPosition] != -1)) {
                 length++;
                 currentPosition--;
@@ -113,7 +113,7 @@ public class DiskFragmenter {
             return length;
         }
 
-        private int findGapOfLength(int indexOfFileStart, int fileSize, int[] disk) {
+        private int findGapOfLength(int indexOfFileStart, int fileSize) {
             int currentGapSize = 0;
             for(int i = 0; i < disk.length && i <= indexOfFileStart; i++) {
                 if(currentGapSize >= fileSize)
@@ -129,7 +129,7 @@ public class DiskFragmenter {
             return -1;
         }
 
-        private int findLastFile(int[] disk, int position) {
+        private int findLastFileEndIndexBeforePosition(int position) {
             int currentPosition = position;
 
             while (currentPosition >= 0) {
