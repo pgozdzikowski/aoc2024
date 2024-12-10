@@ -1,6 +1,7 @@
 package pl.gozdzikowski.pawel.adventofcode.day10;
 
 import pl.gozdzikowski.pawel.adventofcode.shared.collections.Pair;
+import pl.gozdzikowski.pawel.adventofcode.shared.graph.GraphExt;
 import pl.gozdzikowski.pawel.adventofcode.shared.input.Input;
 
 import java.util.ArrayList;
@@ -45,24 +46,11 @@ public class HoofIt {
                 .toArray(int[][]::new);
     }
 
-    private List<SequencedCollection<Pair<Integer, Integer>>> findPathsReachingMax(int[][] graph, Pair<Integer, Integer> startingPosition) {
-        Deque<SequencedCollection<Pair<Integer, Integer>>> queue = new LinkedList<>();
-        queue.add(new LinkedList<>(List.of(startingPosition)));
-        List<SequencedCollection<Pair<Integer, Integer>>> pathsToEnd = new ArrayList<>();
-        while (!queue.isEmpty()) {
-            SequencedCollection<Pair<Integer, Integer>> currentPath = queue.pollFirst();
-
-            Pair<Integer, Integer> last = currentPath.getLast();
-
-            if (graph[last.right()][last.left()] == MAX_POSITION) {
-                pathsToEnd.add(currentPath);
-                continue;
-            }
-
-            queue.addAll(neighbours(currentPath, graph));
-
-        }
-        return pathsToEnd;
+    private List<? extends SequencedCollection<Pair<Integer, Integer>>> findPathsReachingMax(int[][] graph, Pair<Integer, Integer> startingPosition) {
+        return GraphExt.bfs(startingPosition,
+                (path) -> graph[path.getLast().right()][path.getLast().left()] == MAX_POSITION,
+                (path) -> neighbours(path, graph)
+        );
     }
 
 
