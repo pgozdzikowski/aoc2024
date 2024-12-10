@@ -1,5 +1,6 @@
 package pl.gozdzikowski.pawel.adventofcode.day4;
 
+import pl.gozdzikowski.pawel.adventofcode.shared.collections.ArraysExt;
 import pl.gozdzikowski.pawel.adventofcode.shared.collections.Pair;
 import pl.gozdzikowski.pawel.adventofcode.shared.input.Input;
 
@@ -7,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
+
+import static pl.gozdzikowski.pawel.adventofcode.shared.collections.ArraysExt.outOfBound;
 
 public class CeresSearch {
     private static final String SEARCHED_WORD_XMAS = "XMAS";
@@ -61,7 +64,7 @@ public class CeresSearch {
         int currentY = y;
         List<Pair<Integer, Integer>> indexesOfWords = new ArrayList<>();
         for (int i = 0; i < searchedWord.length(); i++) {
-            if (isNotOutOfBound(crossword, currentX, currentY)) {
+            if (!outOfBound(Pair.of(currentX, currentY), crossword)) {
                 if (searchedWord.charAt(i) == crossword[currentY][currentX].charAt(0)) {
                     indexesOfWords.add(Pair.of(currentX, currentY));
                     currentX += direction.left();
@@ -75,10 +78,6 @@ public class CeresSearch {
         }
 
         return indexesOfWords;
-    }
-
-    private static boolean isNotOutOfBound(String[][] crossword, int currentX, int currentY) {
-        return currentX >= 0 && currentY >= 0 && currentX < crossword[0].length && currentY < crossword.length;
     }
 
     private static String[][] parseCrossword(Input input) {

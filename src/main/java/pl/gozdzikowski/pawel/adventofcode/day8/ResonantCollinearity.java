@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static pl.gozdzikowski.pawel.adventofcode.shared.collections.ArraysExt.outOfBound;
+
 public class ResonantCollinearity {
 
     public int countDistinctAntinodesAtDistanceTwo(Input input) {
@@ -43,9 +45,6 @@ public class ResonantCollinearity {
         return locationsOfSameTypeAntennas;
     }
 
-    private boolean outOfBound(Pair<Integer, Integer> position, String[][] world) {
-        return position.left() < 0 || position.right() < 0 || position.left() >= world[0].length || position.right() >= world.length;
-    }
 
     private Set<Pair<Integer, Integer>> findAntinodes(String[][] world, Map<String, List<Pair<Integer, Integer>>> locationsOfSameTypeAntennas, int from, int to) {
         Set<Pair<Integer, Integer>> antinodes = new HashSet<>();

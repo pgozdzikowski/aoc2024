@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static pl.gozdzikowski.pawel.adventofcode.shared.collections.ArraysExt.outOfBound;
+
 public class GuardGallivant {
 
     private static final Map<Direction, Direction> COLLISION_RULES = Map.ofEntries(
@@ -85,10 +87,6 @@ public class GuardGallivant {
 
     public Pair<Integer, Integer> plus(Pair<Integer, Integer> first, Pair<Integer, Integer> second) {
         return Pair.of(first.left() + second.left(), first.right() + second.right());
-    }
-
-    private boolean outOfBound(Pair<Integer, Integer> position, String[][] world) {
-        return position.left() < 0 || position.right() < 0 || position.left() >= world[0].length || position.right() >= world.length;
     }
 
     GuardState findInitialGuardState(String[][] world) {
