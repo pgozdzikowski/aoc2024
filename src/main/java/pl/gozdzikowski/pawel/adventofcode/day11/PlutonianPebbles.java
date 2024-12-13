@@ -4,6 +4,7 @@ import pl.gozdzikowski.pawel.adventofcode.shared.input.Input;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -13,7 +14,9 @@ public class PlutonianPebbles {
 
     public long countNumberOfStones(Input input, int iterations) {
         Map<Long, Long> stonesMap = Arrays.stream(input.getContent().split("\\s")).map(Long::valueOf)
-                .collect(Collectors.toMap(Function.identity(), (el) -> 1L));
+                .collect(Collectors.toMap(Function.identity(), (el) -> 1L, (o1, o2) -> {
+                    throw new IllegalStateException();
+                }, LinkedHashMap::new)); // preserve order of insertion
         int i = 0;
 
         while (i < iterations) {

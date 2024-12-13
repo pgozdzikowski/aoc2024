@@ -63,7 +63,7 @@ Prize: X=18641, Y=10279
         when:
             def result = clawContraption.calculateLowestTokensIncreased(new StringInput(input))
         then:
-            result == 480
+            result == 875318608908
     }
 
     def 'solution 2'() {
@@ -72,6 +72,6 @@ Prize: X=18641, Y=10279
         when:
             def result = clawContraption.calculateLowestTokensIncreased(input)
         then:
-            result == 28753
+            result == 102718967795500
     }
 }

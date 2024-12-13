@@ -113,7 +113,6 @@ public class GardenGroups {
             return ArraysExt.outOfBound(el, garden) || !points.contains(el);
         }
 
-
         private long calculateLines(List<Pair<Integer, Integer>> edgePoints, Comparator<Pair<Integer, Integer>> comparator, Pair<Integer, Integer> diff) {
             List<Pair<Integer, Integer>> sortedPoints = edgePoints.stream().sorted(comparator).toList();
             List<Pair<Integer, Integer>> currentLine = new ArrayList<>();

@@ -15,26 +15,14 @@ public class ClawContraption {
     public long calculateTotalLowestNumToWinPrice(Input input) {
         String[] splitted = input.getContent().split("\\n\\n");
         List<Machine> machines = parseMachines(splitted);
-
-        long result = 0L;
-        for (Machine machine : machines) {
-            result += calculateLowerNumberOfTokens(machine);
-        }
-
-
-        return result;
+        return machines.stream().mapToLong(this::calculateLowerNumberOfTokens).sum();
     }
 
     public long calculateLowestTokensIncreased(Input input) {
         String[] splitted = input.getContent().split("\\n\\n");
         List<Machine> machines = parseMachines(splitted);
 
-        long result = 0L;
-        for (Machine machine : machines) {
-            result += calculateLowestTokensWithIncrease(machine);
-        }
-
-        return result;
+        return machines.stream().mapToLong(this::calculateLowestTokensWithIncrease).sum();
     }
 
     /**
