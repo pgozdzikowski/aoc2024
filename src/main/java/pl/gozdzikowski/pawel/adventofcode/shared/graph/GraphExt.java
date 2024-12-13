@@ -3,7 +3,6 @@ package pl.gozdzikowski.pawel.adventofcode.shared.graph;
 import pl.gozdzikowski.pawel.adventofcode.shared.collections.Pair;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
