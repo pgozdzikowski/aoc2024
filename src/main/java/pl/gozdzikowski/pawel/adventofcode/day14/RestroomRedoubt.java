@@ -1,5 +1,6 @@
 package pl.gozdzikowski.pawel.adventofcode.day14;
 
+import org.jgrapht.graph.WeightedIntrusiveEdgesSpecifics;
 import pl.gozdzikowski.pawel.adventofcode.shared.collections.Pair;
 import pl.gozdzikowski.pawel.adventofcode.shared.input.Input;
 
@@ -100,9 +101,8 @@ public class RestroomRedoubt {
         Pair<Long, Long> positionAfterIterations(long iterations, int width, int height) {
             long posX = initialPosition.left() + iterations* velocity.left();
             long posY = initialPosition.right() + iterations* velocity.right();
-
-            posX = (posX % width + width) % width;
-            posY = (posY % height + height) % height;
+            posX = (posX >= 0) ? posX % width : (width - (Math.abs(posX) % width)) % width;
+            posY = (posY >= 0) ? posY % height : (height - (Math.abs(posY) % height)) % height;
 
             return Pair.of(posX, posY);
         }
