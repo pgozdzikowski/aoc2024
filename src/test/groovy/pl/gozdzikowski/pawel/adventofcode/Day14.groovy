@@ -40,14 +40,13 @@ p=9,5 v=-3,-3"""
             result == 233709840
     }
 
-//    @Ignore
-//    def 'solution 2'() {
-//        given:
-//            Input input = new FileInput('day14.txt')
-//        when:
-//            def result = restroomRedoubt.calculateNumSecondsToFormChristasTree(input, 101, 103)
-//        then:
-//            result == 6620
-//    }
+    def 'solution 2'() {
+        given:
+            Input input = new FileInput('day14.txt')
+        when:
+            def result = restroomRedoubt.calculateNumSecondsToFormChristasTree(input, 101, 103)
+        then:
+            result == 6620
+    }
 
 }

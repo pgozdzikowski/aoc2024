@@ -7,6 +7,7 @@ import pl.gozdzikowski.pawel.adventofcode.shared.input.Input;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -23,40 +24,39 @@ public class RestroomRedoubt {
         List<Robot> robots = input.get().stream().map(this::parseRobot).toList();
         long iterations = 0;
         List<Pair<Long, Long>> positions;
-        try(BufferedOutputStream buf = new BufferedOutputStream(new FileOutputStream("search-christmas-tree.txt"))) {
-            do {
-                System.out.println("Iterations: " + iterations);
-                buf.write(("Iterations:" + iterations + "\n").getBytes());
-                final long fIterations = iterations;
-                positions = robots.stream().map((robot) -> robot.positionAfterIterations(fIterations, width, height)).toList();
-
-                iterations++;
-            } while (!formChristmasTree(buf, positions, width, height) && iterations < 10000L);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        do {
+            iterations++;
+            System.out.println("Iterations: " + iterations);
+            final long fIterations = iterations;
+            positions = robots.stream().map((robot) -> robot.positionAfterIterations(fIterations, width, height)).toList();
+        } while (!formChristmasTree(positions, width, height));
 
         return iterations;
     }
-    private boolean formChristmasTree(BufferedOutputStream buf, List<Pair<Long, Long>> positions, int width, int height) throws IOException {
-        printChristmasTree(buf, positions, width, height);
+
+    private boolean formChristmasTree(List<Pair<Long, Long>> positions, int width, int height) {
+        String state = printChristmasTree(positions, width, height);
+
+        if(state.contains("#########"))
+            return true;
 
         return false;
     }
 
-    private void printChristmasTree(BufferedOutputStream buf, List<Pair<Long, Long>> positions, int width, int height) throws IOException {
-        for(long y=0; y<height; y++) {
-            for(long x=0; x<width; x++) {
-                if(positions.contains(Pair.of(x, y))) {
-                    buf.write("#".getBytes());
+    private String printChristmasTree(List<Pair<Long, Long>> positions, int width, int height) {
+        StringBuilder sb = new StringBuilder();
+        for (long y = 0; y < height; y++) {
+            for (long x = 0; x < width; x++) {
+                if (positions.contains(Pair.of(x, y))) {
+                    sb.append("#");
                 } else {
-                    buf.write(".".getBytes());
+                    sb.append(".");
                 }
 
             }
-            buf.write("\n".getBytes());
+            sb.append("\n");
         }
-        buf.flush();
+        return sb.toString();
     }
 
     private long calculateMultiplicationOfQuarter(List<Pair<Long, Long>> positions, int width, int height) {
@@ -68,17 +68,17 @@ public class RestroomRedoubt {
         int xHalf = width / 2;
         int yHalf = height / 2;
 
-        for(Pair<Long, Long> position : positions) {
-            if(position.left() < xHalf && position.right() < yHalf) {
+        for (Pair<Long, Long> position : positions) {
+            if (position.left() < xHalf && position.right() < yHalf) {
                 firstHalf++;
             }
-            if(position.left() > xHalf && position.right() < yHalf) {
+            if (position.left() > xHalf && position.right() < yHalf) {
                 secondHalf++;
             }
-            if(position.left() < xHalf && position.right() > yHalf) {
+            if (position.left() < xHalf && position.right() > yHalf) {
                 thirdHalf++;
             }
-            if(position.left() > xHalf && position.right() > yHalf) {
+            if (position.left() > xHalf && position.right() > yHalf) {
                 fourthHalf++;
             }
         }
@@ -99,8 +99,8 @@ public class RestroomRedoubt {
             Pair<Integer, Integer> velocity
     ) {
         Pair<Long, Long> positionAfterIterations(long iterations, int width, int height) {
-            long posX = initialPosition.left() + iterations* velocity.left();
-            long posY = initialPosition.right() + iterations* velocity.right();
+            long posX = initialPosition.left() + iterations * velocity.left();
+            long posY = initialPosition.right() + iterations * velocity.right();
             posX = (posX >= 0) ? posX % width : (width - (Math.abs(posX) % width)) % width;
             posY = (posY >= 0) ? posY % height : (height - (Math.abs(posY) % height)) % height;
 
