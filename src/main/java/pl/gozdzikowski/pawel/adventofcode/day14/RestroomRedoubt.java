@@ -1,13 +1,8 @@
 package pl.gozdzikowski.pawel.adventofcode.day14;
 
-import org.jgrapht.graph.WeightedIntrusiveEdgesSpecifics;
 import pl.gozdzikowski.pawel.adventofcode.shared.collections.Pair;
 import pl.gozdzikowski.pawel.adventofcode.shared.input.Input;
 
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
