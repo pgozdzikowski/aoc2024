@@ -62,9 +62,10 @@ public class LinenLayout {
             String newPattern = pattern.substring(0, pattern.length() - i);
             if (openTowels.contains(newPattern)) {
                 possibleArrengments += countAllPatterns(openTowels, pattern.substring(pattern.length() - i));
-                MEMOIZATION.put(pattern, possibleArrengments);
             }
         }
+
+        MEMOIZATION.put(pattern, possibleArrengments);
 
         return possibleArrengments;
     }
