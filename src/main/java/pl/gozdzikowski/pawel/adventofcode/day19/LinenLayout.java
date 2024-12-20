@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Stack;
 
 public class LinenLayout {
@@ -58,10 +59,11 @@ public class LinenLayout {
         }
 
         long possibleArrengments = 0;
-        for (int i = 0; i < pattern.length(); ++i) {
-            String newPattern = pattern.substring(0, pattern.length() - i);
-            if (openTowels.contains(newPattern)) {
-                possibleArrengments += countAllPatterns(openTowels, pattern.substring(pattern.length() - i));
+        for (int i = 0; i <= pattern.length(); ++i) {
+            String newPattern = pattern.substring(0, i);
+            Optional<String> matchingTowel = openTowels.stream().filter((el) -> el.equals(newPattern)).findFirst();
+            if (matchingTowel.isPresent()) {
+                possibleArrengments += countAllPatterns(openTowels, pattern.replaceFirst(matchingTowel.get(), ""));
             }
         }
 
