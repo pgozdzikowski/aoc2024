@@ -5,8 +5,13 @@ import pl.gozdzikowski.pawel.adventofcode.shared.input.Input;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class WarehouseWoes {
 
@@ -20,6 +25,21 @@ public class WarehouseWoes {
         }
 
         return calculateSumOfGpsPositionsOfPackeges(warehouse, "O");
+    }
+
+    public long countGpsPositionsOfBiggerPackages(Input input) {
+        String[] splited = input.getContent().split("\n\n");
+        String[][] warehouse = Arrays.stream(splited[0].split("\n")).map((el) -> el.split("")).toArray(String[][]::new);
+        String[] commands = Arrays.stream(splited[1].split("")).filter((el) -> !el.equals("\n")).toArray(String[]::new);
+        warehouse = doubleWarehouse(warehouse);
+        Pair<Integer, Integer> positionOfRobot = findInitialPositionOfRobot(warehouse);
+        printWarehouse(warehouse);
+
+        for (String command : commands) {
+            positionOfRobot = execute(command, positionOfRobot, warehouse);
+        }
+
+        return calculateSumOfGpsPositionsOfPackeges(warehouse, "[");
     }
 
     private String[][] doubleWarehouse(String[][] warehouse) {
@@ -54,58 +74,59 @@ public class WarehouseWoes {
         return result;
     }
 
-    private Pair<Integer, Integer> execute(String command, Pair<Integer, Integer> positionOfMove, String[][] warehouse) {
+    Map<String, Pair<Integer, Integer>> BRACKET_TO_OFFSET = Map.of(
+            "[", Pair.of(1, 0),
+            "]", Pair.of(-1, 0)
+    );
+
+    List<Pair<Integer, Integer>> VERTICAL_DIRECTIONS = List.of(Pair.of(-1, 0), Pair.of(1, 0));
+
+    private Pair<Integer, Integer> execute(String command, Pair<Integer, Integer> startingPosition, String[][] warehouse) {
         Pair<Integer, Integer> offset = mapCommandToOffset(command);
 
-        Pair<Integer, Integer> nextPos = plus(positionOfMove, offset);
+        Set<Pair<Integer, Integer>> visitedPositions = new HashSet<>();
+        Stack<Pair<Integer, Integer>> stack = new Stack<>();
+        stack.push(plus(startingPosition, offset));
+        visitedPositions.add(startingPosition);
+        while(!stack.isEmpty()) {
+            Pair<Integer, Integer> position = stack.pop();
+            if(warehouse[position.right()][position.left()].equals("#")) {
+                return startingPosition;
+            }
 
-        System.out.println("Command: " + command);
-        if (warehouse[nextPos.right()][nextPos.left()].equals(".")) {
-            Pair<Integer, Integer> prevPos = plus(nextPos, negate(offset));
-            swap(warehouse, prevPos, nextPos);
-            return nextPos;
-        } else if (warehouse[nextPos.right()][nextPos.left()].equals("#")) {
-            return positionOfMove;
-        } else if (warehouse[nextPos.right()][nextPos.left()].equals("O")) {
-            Pair<Integer, Integer> posOfGap = findPositionOfGap(warehouse, nextPos, offset);
-            if (posOfGap != null) {
-                while (!posOfGap.equals(positionOfMove)) {
-                    Pair<Integer, Integer> prevPos = plus(posOfGap, negate(offset));
-                    swap(warehouse, prevPos, posOfGap);
-                    posOfGap = prevPos;
+            if(warehouse[position.right()][position.left()].equals("."))
+                continue;
+
+            if(visitedPositions.contains(position))
+                continue;
+
+            if(VERTICAL_DIRECTIONS.contains(offset)) {
+                Pair<Integer, Integer> positionAfterMove = plus(position, offset);
+                stack.push(positionAfterMove);
+            } else {
+                Pair<Integer, Integer> positionAfterMove = plus(position, offset);
+                stack.push(positionAfterMove);
+                if(BRACKET_TO_OFFSET.containsKey(warehouse[positionAfterMove.right()][positionAfterMove.left()])) {
+                    Pair<Integer, Integer> secondPositionToCheck = plus(position, BRACKET_TO_OFFSET.get(warehouse[position.right()][position.left()]));
+                    stack.push(secondPositionToCheck);
                 }
-                return plus(posOfGap, offset);
+
             }
+
+            visitedPositions.add(position);
         }
 
-        return positionOfMove;
-    }
+        Map<Pair<Integer, Integer>, String> oldToNew = visitedPositions.stream().collect(Collectors.toMap(Function.identity(), (el) -> warehouse[el.right()][el.left()]));
+        visitedPositions.forEach((el) -> warehouse[el.right()][el.left()] = ".");
+        visitedPositions.stream().map((el) -> Pair.of(el, plus(el, offset))).forEach((el) -> {
+            warehouse[el.right().right()][el.right().left()] = oldToNew.get(el.left());
+        });
 
-
-    private Pair<Integer, Integer> findPositionOfGap(String[][] warehouse, Pair<Integer, Integer> position, Pair<Integer, Integer> offset) {
-        Pair<Integer, Integer> posOfGap = position;
-        while (!warehouse[posOfGap.right()][posOfGap.left()].equals(".")) {
-            if (warehouse[posOfGap.right()][posOfGap.left()].equals("#")) {
-                posOfGap = null;
-                break;
-            }
-            posOfGap = plus(posOfGap, offset);
-        }
-        return posOfGap;
-    }
-
-    private static void swap(String[][] warehouse, Pair<Integer, Integer> prevPos, Pair<Integer, Integer> nextPos) {
-        String swap = warehouse[prevPos.right()][prevPos.left()];
-        warehouse[prevPos.right()][prevPos.left()] = warehouse[nextPos.right()][nextPos.left()];
-        warehouse[nextPos.right()][nextPos.left()] = swap;
+        return plus(startingPosition, offset);
     }
 
     private Pair<Integer, Integer> plus(Pair<Integer, Integer> first, Pair<Integer, Integer> second) {
         return Pair.of(first.left() + second.left(), first.right() + second.right());
-    }
-
-    private Pair<Integer, Integer> negate(Pair<Integer, Integer> first) {
-        return Pair.of(-first.left(), -first.right());
     }
 
     private Pair<Integer, Integer> mapCommandToOffset(String command) {

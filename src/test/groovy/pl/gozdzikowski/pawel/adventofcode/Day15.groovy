@@ -68,21 +68,41 @@ v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^"""
     }
 
 
-//    def 'sample 2 part2'() {
-//        given:
-//            String input = """#######
-//#...#.#
-//#.....#
-//#..OO@#
-//#..O..#
-//#.....#
-//#######
-//
-//<vv<<^^<<^^"""
-//        when:
-//            def result = warehouseWoes.countGpsPositionsOfBiggerPackages(new StringInput(input))
-//        then:
-//            result == 2028
-//
-//    }
+    def 'sample 2 part2'() {
+        given:
+            String input = """##########
+#..O..O.O#
+#......O.#
+#.OO..O.O#
+#..O@..O.#
+#O#..O...#
+#O..O..O.#
+#.OO.O.OO#
+#....O...#
+##########
+
+<vv>^<v^>v>^vv^v>v<>v^v<v<^vv<<<^><<><>>v<vvv<>^v^>^<<<><<v<<<v^vv^v>^
+vvv<<^>^v^^><<>>><>^<<><^vv^^<>vvv<>><^^v>^>vv<>v<<<<v<^v>^<^^>>>^<v<v
+><>vv>v^v^<>><>>>><^^>vv>v<^^^>>v^v^<^^>v^^>v^<^v>v<>>v^v^<v>v^^<^^vv<
+<<v<^>>^^^^>>>v^<>vvv^><v<<<>^^^vv^<vvv>^>v<^^^^v<>^>vvvv><>>v^<<^^^^^
+^><^><>>><>^^<<^^v>>><^<v>^<vv>>v>>>^v><>^v><<<<v>>v<v<v>vvv>^<><<>^><
+^>><>^v<><^vvv<^^<><v<<<<<><^v<<<><<<^^<v<^^^><^>>^<v^><<<^>>^v<v^v<v^
+>^>>^v>vv>^<<^v<>><<><<v<<v><>v<^vv<<<>^^v^>^^>>><<^v>>v^v><^^>>^<>vv^
+<><^^>^^^<><vvvvv^v<v<<>^v<v>v<<^><<><<><<<^^<<<^<<>><<><^^^>^^<>^>v<>
+^^>vv<^v^v<vv>^<><v<^v>^^^>>>^^vvv^>vvv<>>>^<^>>>>>^<<^v>^vvv<>^<><<v>
+v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^"""
+        when:
+            def result = warehouseWoes.countGpsPositionsOfBiggerPackages(new StringInput(input))
+        then:
+            result == 9021
+    }
+
+    def 'solution 2 part 2'() {
+        given:
+            Input input = new FileInput('day15.txt')
+        when:
+            def result = warehouseWoes.countGpsPositionsOfBiggerPackages(input)
+        then:
+            result == 1514333
+    }
 }
