@@ -9,10 +9,26 @@ class Day21 extends Specification {
 
     def 'sample 1'() {
         given:
-            String input = "029A"
+            def input = ["029A",
+"980A",
+"179A",
+"456A",
+"379A"]
         when:
-            def sequences = keypadConundrum.sequencesToPushButton(input)
+            def result = keypadConundrum.calculateSumOfCodesMoves(input as String[])
         then:
-            sequences == []
+            result == 126384
+    }
+
+    def 'solution 1'() {
+        given:
+            def input = [
+                    "286A", "480A", "140A", "413A", "964A"
+            ]
+
+        when:
+            def result = keypadConundrum.calculateSumOfCodesMoves(input as String[])
+        then:
+            result == 163086
     }
 }
