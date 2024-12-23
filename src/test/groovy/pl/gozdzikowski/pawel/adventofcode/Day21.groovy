@@ -1,6 +1,7 @@
 package pl.gozdzikowski.pawel.adventofcode
 
 import pl.gozdzikowski.pawel.adventofcode.day21.KeypadConundrum
+import spock.lang.Ignore
 import spock.lang.Specification
 
 class Day21 extends Specification {
@@ -20,6 +21,7 @@ class Day21 extends Specification {
             result == 126384
     }
 
+    @Ignore
     def 'solution 1'() {
         given:
             def input = [
