@@ -1,6 +1,5 @@
 package pl.gozdzikowski.pawel.adventofcode.day22;
 
-import pl.gozdzikowski.pawel.adventofcode.shared.collections.Pair;
 import pl.gozdzikowski.pawel.adventofcode.shared.input.Input;
 
 import java.util.ArrayList;
@@ -49,24 +48,18 @@ public class MonkeyMarket {
     }
 
     public Long lastDigit(Long number) {
-        String numberAsString = number.toString();
-        return Long.parseLong(new String("" + numberAsString.charAt(numberAsString.length() - 1)));
+        return number % 10;
     }
 
     private Map<List<Long>, Long> firstWindowed(List<Long> list, List<Long> result) {
-        Map<List<Long>, Pair<Integer,Long>> sequencesToPrice = new HashMap<>();
-        for (int i = 0; i < list.size(); i++) {
-            for (int j = i; j <= (list.size() - 4); j += 4) {
-                List<Long> sublist = list.subList(j, j + 4);
-                Pair<Integer, Long> priceWithIndex = sequencesToPrice.get(sublist);
-                if(priceWithIndex == null || priceWithIndex.left() > j) {
-                    sequencesToPrice.put(sublist, new Pair<>(j, lastDigit(result.get(j + 4))));
-                }
-            }
+        Map<List<Long>, Long> sequencesToPrice = new HashMap<>();
+        for (int i = 0; i  <= list.size() - 4 ; i++) {
+            List<Long> sublist = list.subList(i, i + 4);
+            int finalI = i;
+            sequencesToPrice.computeIfAbsent(sublist, (key) ->  lastDigit(result.get(finalI + 4)));
 
         }
-        return sequencesToPrice.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, (el) -> el.getValue().right()));
+        return sequencesToPrice;
     }
 
     private List<Long> calculateSecretNumber(long secret) {

@@ -46,7 +46,6 @@ class Day22 extends Specification{
             result == 23
     }
 
-    @Ignore
     def 'solution 2'() {
         given:
             Input input = new FileInput('day22.txt')
