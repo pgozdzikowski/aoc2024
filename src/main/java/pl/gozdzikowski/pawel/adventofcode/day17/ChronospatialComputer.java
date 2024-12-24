@@ -10,10 +10,7 @@ public class ChronospatialComputer {
     public State displayOutput(String commands, int aReg, int bReg, int cReg) {
         State currentState = new State(aReg, bReg, cReg, 0, "");
         int[] commandsArray = Arrays.stream(commands.split(",")).mapToInt(Integer::parseInt).toArray();
-        while (true) {
-            if (currentState.instructionPointer + 1 >= commandsArray.length) {
-                break;
-            }
+        while (currentState.instructionPointer + 1 < commandsArray.length) {
 
             int instruction  = commandsArray[currentState.instructionPointer];
             int operand = commandsArray[currentState.instructionPointer + 1];

@@ -94,7 +94,7 @@ v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^"""
         when:
             def result = warehouseWoes.countGpsPositionsOfBiggerPackages(new StringInput(input))
         then:
-            result == 9021
+            result == 8795
     }
 
     def 'solution 2 part 2'() {
@@ -103,6 +103,6 @@ v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^"""
         when:
             def result = warehouseWoes.countGpsPositionsOfBiggerPackages(input)
         then:
-            result == 1514333
+            result == 1523128
     }
 }

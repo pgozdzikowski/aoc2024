@@ -101,12 +101,10 @@ public class LANParty {
     }
 
     private List<List<String>> neighbours(List<String> currentPath, Map<String, List<String>> graph) {
-        List<List<String>> newPaths = graph.get(currentPath.getLast())
+        return graph.get(currentPath.getLast())
                 .stream()
                 .filter((el) -> !currentPath.contains(el) && currentPath.stream().allMatch((currentPathEl) -> graph.get(el).contains(currentPathEl)) )
                 .map((el) -> Stream.concat(currentPath.stream(), Stream.of(el)).toList())
                 .toList();
-
-        return newPaths;
     }
 }
