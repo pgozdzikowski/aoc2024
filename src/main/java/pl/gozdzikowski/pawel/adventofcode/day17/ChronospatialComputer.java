@@ -1,6 +1,10 @@
 package pl.gozdzikowski.pawel.adventofcode.day17;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.IntStream;
 
 import static pl.gozdzikowski.pawel.adventofcode.day17.ChronospatialComputer.OperandType.COMBO;
 import static pl.gozdzikowski.pawel.adventofcode.day17.ChronospatialComputer.OperandType.LITERAL;
@@ -128,7 +132,30 @@ public class ChronospatialComputer {
         }
     }
 
+    static <E> List<List<E>> permK(List<E> p, int i, int k)
+    {
+        if(i == k)
+        {
+            return List.of(p.subList(0, k));
+        }
+
+
+        List<List<E>> result = new ArrayList<>();
+        for(int j=i; j<p.size(); j++)
+        {
+            Collections.swap(p, i, j);
+            result.addAll(permK(p, i+1, k));
+            Collections.swap(p, i, j);
+        }
+        return result;
+    }
+
     enum OperandType {
         LITERAL, COMBO
+    }
+
+    public static void main(String[] args) {
+        List<Integer> list = IntStream.range(0, 20).mapToObj(Integer::valueOf).toList();
+        System.out.println(permK(new ArrayList<>(list), 0, 8));
     }
 }
